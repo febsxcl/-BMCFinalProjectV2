@@ -7,6 +7,7 @@ import 'package:ecommerce_app/screens/product_detail_screen.dart'; // 1. ADD THI
 import 'package:ecommerce_app/providers/cart_provider.dart'; // 1. ADD THIS
 import 'package:ecommerce_app/screens/cart_screen.dart'; // 2. ADD THIS
 import 'package:provider/provider.dart'; // 3. ADD THIS
+import 'package:ecommerce_app/screens/order_history_screen.dart'; // 1. ADD THIS
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -71,32 +72,45 @@ class _HomeScreenState extends State<HomeScreen> {
         title: Text(
           _currentUser != null ? 'Welcome, ${_currentUser.email}' : 'Home',
         ),
-        actions: [
-          // 2. --- THIS IS THE MAGIC ---
-          //    This is a "collection-if". The IconButton will only
-          //    be built IF _userRole is equal to 'admin'.
-                    // 1. --- ADD THIS NEW WIDGET ---
-          // This is a special, efficient way to use Provider
-          Consumer<CartProvider>(
-            // 2. The "builder" function rebuilds *only* the icon
-            builder: (context, cart, child) {
-              // 3. The "Badge" widget adds a small label
-              return Badge(
-                // 4. Get the count from the provider
-                label: Text(cart.itemCount.toString()),
-                // 5. Only show the badge if the count is > 0
-                isLabelVisible: cart.itemCount > 0,
-                // 6. This is the child (our icon button)
-                child: IconButton(
-                  icon: const Icon(Icons.shopping_cart),
-                  onPressed: () {
-                    // 7. Navigate to the CartScreen
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => const CartScreen(),
-                      ),
-                    );
-                  },
+          actions: [
+            // 2. --- THIS IS THE MAGIC ---
+            //    This is a "collection-if". The IconButton will only
+            //    be built IF _userRole is equal to 'admin'.
+                      // 1. --- ADD THIS NEW WIDGET ---
+            // This is a special, efficient way to use Provider
+            Consumer<CartProvider>(
+              // 2. The "builder" function rebuilds *only* the icon
+              builder: (context, cart, child) {
+                // 3. The "Badge" widget adds a small label
+                return Badge(
+                  // 4. Get the count from the provider
+                  label: Text(cart.itemCount.toString()),
+                  // 5. Only show the badge if the count is > 0
+                  isLabelVisible: cart.itemCount > 0,
+                  // 6. This is the child (our icon button)
+                  child: IconButton(
+                    icon: const Icon(Icons.shopping_cart),
+                    onPressed: () {
+                      // 7. Navigate to the CartScreen
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => const CartScreen(),
+                        ),
+                      );
+                    },
+                  ),
+                );
+              },
+            ),
+
+  // 2. --- ADD THIS NEW BUTTON ---
+          IconButton(
+            icon: const Icon(Icons.receipt_long), // A "receipt" icon
+            tooltip: 'My Orders',
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => const OrderHistoryScreen(),
                 ),
               );
             },
